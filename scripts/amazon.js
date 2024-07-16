@@ -1,4 +1,8 @@
-let h = '';
+
+import {products} from '../data/products.js';
+import {cart} from '../data/cart.js';
+
+let h = "";
 products.forEach((product) => {
   h += `<div class="product-container">
             <div class="product-image-container">
@@ -10,7 +14,9 @@ products.forEach((product) => {
             </div>
 
             <div class="product-rating-container">
-              <img class="product-rating-stars" src="images/ratings/rating-${(product.rating.stars) * 10}.png">
+              <img class="product-rating-stars" src="images/ratings/rating-${
+                product.rating.stars * 10
+              }.png">
               <div class="product-rating-count link-primary">
                 ${product.rating.count}
               </div>
@@ -21,7 +27,9 @@ products.forEach((product) => {
             </div>
 
             <div class="product-quantity-container">
-              <select>
+              <select class="js-quantity-selector" data-product-id="${
+                product.id
+              }">
                 <option selected value="1">1</option>
                 <option value="2">2</option>
                 <option value="3">3</option>
@@ -37,36 +45,50 @@ products.forEach((product) => {
 
             <div class="product-spacer"></div>
 
-            <div class="added-to-cart">
+            <div class="added-to-cart" data-product-id="${product.id}">
               <img src="images/icons/checkmark.png">
               Added
             </div>
 
-            <button class="add-to-cart-button button-primary js-add-to-cart" data-product-id="${product.id}">
+            <button class="add-to-cart-button button-primary js-add-to-cart" data-product-id="${
+              product.id
+            }">
               Add to Cart
             </button>
           </div>`;
 });
+
 document.querySelector(".js-products-grid").innerHTML = h;
 
+/* this is a very imporatant part where we find a way to add quantity of items from selector */
 document.querySelectorAll(".js-add-to-cart").forEach((button) => {
   button.addEventListener("click", () => {
     const productId = button.dataset.productId;
-    let matchingItem = cart.find(item => item.id === productId);
+    const selector = document.querySelector(`.js-quantity-selector[data-product-id="${productId}"]`);
+    const selectedQuantity = parseInt(selector.value, 10);
+
+    let matchingItem = cart.find((item) => item.id === productId);
 
     if (matchingItem) {
-      matchingItem.quantity += 1;
+      matchingItem.quantity += selectedQuantity;
     } else {
-
       cart.push({
-        id:  productId,
-        quantity: 1
-       
+        id: productId,
+        quantity: selectedQuantity,
       });
-     
     }
-    console.log(cart);
-  } 
-);
-  
+    
+    // Update the total quantity in the cart display
+    let totalQuantity = 0;
+    cart.forEach((item) => {
+      totalQuantity += item.quantity;
+    });
+    document.querySelector(".cart-quantity").innerHTML = String(totalQuantity);
+    const message=document.querySelector(`.added-to-cart[data-product-id="${productId}"]`);
+    message.style.opacity='1';
+    setTimeout(()=>{message.style.opacity='0';},500);
+    
+
+
+  });
 });
