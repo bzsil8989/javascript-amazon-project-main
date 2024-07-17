@@ -1,5 +1,5 @@
 import { products } from "../data/products.js";
-import { addToCart, cart, updateCartQuantity } from "../data/cart.js";
+import { addToCart, updateCartQuantity } from "../data/cart.js";
 
 let h = "";
 products.forEach((product) => {
@@ -63,11 +63,7 @@ document.querySelector(".js-products-grid").innerHTML = h;
 document.querySelectorAll(".js-add-to-cart").forEach((button) => {
   button.addEventListener("click", () => {
     const productId = button.dataset.productId;
-    const selector = document.querySelector(
-      `.js-quantity-selector[data-product-id="${productId}"]`
-    );
-    const selectedQuantity = parseInt(selector.value, 10);
-
+    
     addToCart(productId);
 
     // Update the total quantity in the cart display
