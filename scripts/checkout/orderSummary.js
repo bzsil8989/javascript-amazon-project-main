@@ -1,8 +1,8 @@
 import { cart, cartQuantity, removeFromCart,  updateDeliveryOption } from "../../data/cart.js";
-import { products } from "../../data/products.js";
+import {getProduct } from "../../data/products.js";
 import { formatCurrency } from "../utils/money.js";
 import { deliveryOptions } from "../../data/deliveryOptions.js";
-
+import { renderPaymentSummary } from "./paymentSummary.js";
 export function renderOrderSummary()
 {
 
@@ -14,12 +14,7 @@ cart.forEach((cartItem) => {
   const productId = cartItem.productId;
 
   // Find matching product
-  let matchingProduct;
-  products.forEach((product) => {
-    if (product.id === productId) {
-      matchingProduct = product;
-    }
-  });
+  let matchingProduct=getProduct(productId);
 
   // Find matching delivery option
   const deliveryOptionId = cartItem.deliveryOptionId;
@@ -123,7 +118,10 @@ document.querySelectorAll(".js-delete-link").forEach((link) => {
       `.js-cart-item-container-${productId}`
     );
     container.remove();
+    renderPaymentSummary();
   });
+  
+  
 });
 
 // Attach event listeners for delivery options
@@ -134,6 +132,7 @@ document.querySelectorAll(".js-delivery-option").forEach((element) => {
     // Update delivery option in the cart
     updateDeliveryOption(productId, deliveryOptionId);
     renderOrderSummary();
+    renderPaymentSummary();
   });
 });
 
