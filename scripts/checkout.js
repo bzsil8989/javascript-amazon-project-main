@@ -3,6 +3,7 @@ import { products } from "../data/products.js";
 import { formatCurrency } from "./utils/money.js";
 import { deliveryOptions } from "../data/deliveryOptions.js";
 
+
 let cartSummaryHTML = ``;
 
 // Generate cart summary HTML
@@ -133,4 +134,4 @@ document.querySelectorAll(".js-delivery-option").forEach((element) => {
 });
 
 // Update cart quantity in the DOM
-document.querySelector(".return").innerHTML = cartQuantity;
+document.querySelector(".return").innerHTML = cartQuantity; 

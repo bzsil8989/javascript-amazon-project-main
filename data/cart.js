@@ -1,6 +1,6 @@
 
 export let cart = JSON.parse(localStorage.getItem("cart"));
-export let cartQuantity = 0;
+export let cartQuantity=0 ;
 if (!cart) {
   cart = [
     {
